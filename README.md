@@ -303,7 +303,7 @@ Select from device jetson nano, to cloud and message topi is "fromnano"
 - Select Test from left menu
 ![](img_3_5_2.png)
 - Add "#" in Subscribe topic, click Subscribe. This will subscribe to all IoT topics comming to Jetson Nano
-![](img_3_5_2.png)
+![](img_3_5_3.png)
 - In Subscrition box you will start seeing IoT messages coming from Jetson nano
 
 ### Step 4: Visualize and analyse video analytics from the model inference on Jetson Nano
