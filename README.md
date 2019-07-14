@@ -136,7 +136,7 @@ In this step, you will create a Ground Truth Labeling job and assign it to the p
 
 *	Enter "Please classify the images as 'cat' or 'dog' " in the textbox as an instruction to the workforce.
   - Add two Options 'cat' or 'dog'
-  - For Good example and Bad example, add links of the public image urls noted in 1.3 section.
+  - For Good example and Bad example, add links of the public image urls noted in 1.4 section.
   -	Submit
 *	Go to AWS Console > Amazon SageMaker > Labeling jobs to verify that a labeling job has been created.
 
