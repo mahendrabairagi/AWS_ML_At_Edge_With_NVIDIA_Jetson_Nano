@@ -7,6 +7,8 @@ In this project I will walkthrough how to create ML@Ede video analytics applicat
 ### Step 3: Deploy model on Jetson Nano using AWS IoT Greengrass
 ### Step 4: Visualize and analyse video analytics from the model inference on Jetson Nano
 
+Lets start with Step 1 
+
 ### Step 1: Data Annotation using Amazon Sagemaker GroundTruth
 In this lab we will use Amazon Sagemaker GroundTruth to label images in a training dataset consisting of cat and dog images. 
 You will start with an unlabeled image training data set, acquire labels for all the images using SageMaker Ground Truth private workforce and finally analyze the results of the labeling job.
@@ -195,3 +197,71 @@ Sample:
 
 Along with the other metadata information, the output manifest shows the identified class of the image and confidence.  
 
+Now we need to build model, train model and optimize model.
+
+### Step 2: Model building, training and optimization using Sagemaker notebooks, containers and Neo
+Model builing, training and optimization is simiplifed by Sagemaker notebooks, training container and Neo.
+All these steps can be done using single notebook. Please follow attached notebook 
+![Sagemaker notebook](ml_at_edge_notebook.ipynb)
+
+Beutify of jupyternotebook is that it can contains code as well as comments. I will use the notebook to explain model building, training and optimization
+
+Now that model is build and optimized, now we can deploy this model on NVIDIA Jetson Nano using AWS IoT Greengrass
+
+### Step 3: Deploy model on Jetson Nano using AWS IoT Greengrass
+This step will need
+- 3.1 Installing AWS IoT Greengrass 
+- 3.2 Setup and configure Inference code using AWS Lambda
+- 3.4 Set machine leaning at edge deployment
+- 3.5 Deploy machine learning at edge on NVIDIA Jetson Nano
+- 3.6 Run model, check inference
+
+#### 
+- 3.1 Installing AWS IoT Greengrass 
+
+First setup Setup your Jetson Nano Developer Kit with the SD card image.
+
+Run the following commands on your Nano to create greengrass user and group:
+
+```
+$ sudo adduser --system ggc_user
+$ sudo addgroup --system ggc_group
+```
+
+Setup your AWS account and Greengrass group during this page: https://docs.aws.amazon.com/greengrass/latest/developerguide/gg-config.html
+After downloading your unique security resource keys to your Jetson that were created in this step, proceed to #4 below.
+
+Download the AWS IoT Greengrass Core Software (v1.9.1) for ARMv8 (aarch64):
+
+```
+$ wget https://d1onfpft10uf5o.cloudfront.net/greengrass-core/downloads/1.9.1/greengrass-linux-aarch64-1.9.1.tar.gz
+```
+
+Following this page (starting with step #4 from that page), extract Greengrass core and your unique security keys on your Nano:
+
+```
+$ sudo tar -xzvf greengrass-linux-aarch64-1.9.1.tar.gz -C /
+$ sudo tar -xzvf <hash>-setup.tar.gz -C /greengrass   # these are the security keys downloaded above
+```
+
+Download AWS ATS endpoint root certificate (CA):
+
+```
+$ cd /greengrass/certs/
+$ sudo wget -O root.ca.pem https://www.amazontrust.com/repository/AmazonRootCA1.pem
+```
+
+Start greengrass core on your Nano:
+
+```
+$ cd /greengrass/ggc/core/
+$ sudo ./greengrassd start
+```
+
+You should get a message in your terminal "Greengrass sucessfully started with PID: xxx"
+
+### Step 4: Visualize and analyse video analytics from the model inference on Jetson Nano
+The lambda code running on NVIDIA Jetson Nano device sends IoT messages back to cloud. These messages are sent to AWS CloudWatch. CloudWatch has built in dashboard. We will use the built in dashboard to visualize data coming from the device.
+
+### Conclusion
+Above steps demostrated how to label data, built model, train model, optimize model, run model and integrate machine learning model running on NVIDIA Nano with AWS Cloud dashboard.
