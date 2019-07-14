@@ -212,9 +212,9 @@ Now that model is build and optimized, now we can deploy this model on NVIDIA Je
 This step will need
 - 3.1 Installing AWS IoT Greengrass 
 - 3.2 Setup and configure Inference code using AWS Lambda
-- 3.4 Set machine leaning at edge deployment
-- 3.5 Deploy machine learning at edge on NVIDIA Jetson Nano
-- 3.6 Run model, check inference
+- 3.3 Set machine leaning at edge deployment
+- 3.4 Deploy machine learning at edge on NVIDIA Jetson Nano
+- 3.5 Run model, check inference
 
 #### 
 - 3.1 Installing AWS IoT Greengrass 
@@ -260,8 +260,74 @@ $ sudo ./greengrassd start
 
 You should get a message in your terminal "Greengrass sucessfully started with PID: xxx"
 
+#### 3.2 Setup and configure Inference code using AWS Lambda
+
+Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Lambda
+
+Click 'Create function'
+
+Choose 'Blueprints'
+
+In the search bar, type “greengrass-hello-world” and hit Enter
+
+Choose the python blueprint and click Configure
+
+Name the function: aws-nvidia-video-analysis-your-name
+Role: Choose an existing role
+[Note: You may need to create new role, give basic execution permissions, choose default)
+
+Click Create Function
+Replace the default script with the [inference script](inference-lambda.py)
+
+#### 3.3  Set machine leaning at edge deployment
+- Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Greengrass
+- Go to AWS IoT Greengrass console
+- Choose the greengrass group you created in step 3.1
+- Select lambda, choose lambda function you created in 3.2
+- make it the lambda long running per doc ![https://docs.aws.amazon.com/greengrass/latest/developerguide/long-lived.html]
+(https://docs.aws.amazon.com/greengrass/latest/developerguide/long-lived.html)
+- In memory, set it to 300MB
+- In resources, add ML model, Select Sagemaker trained model, select job that you created in Sagemaker build model step
+
+#### 3.4 Deploy machine learning at edge on NVIDIA Jetson Nano
+- Go back to AWS IoT Greengrass console
+- We will need to send messages from NVIDIA Jetson to cloud. so we need to setup message routing per screenshot below.
+Select from device jetson nano, to cloud and message topi is "fromnano"
+- Click deploy
+- This will take few minus to download and deploy model
+
+#### 3.5 Check inference
+- Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Greengrass
+- Go to AWS IoT console
+![](img_3_5_1.png)
+- Select Test from left menu
+![](img_3_5_2.png)
+- Add "#" in Subscribe topic, click Subscribe. This will subscribe to all IoT topics comming to Jetson Nano
+![](img_3_5_2.png)
+- In Subscrition box you will start seeing IoT messages coming from Jetson nano
+
 ### Step 4: Visualize and analyse video analytics from the model inference on Jetson Nano
 The lambda code running on NVIDIA Jetson Nano device sends IoT messages back to cloud. These messages are sent to AWS CloudWatch. CloudWatch has built in dashboard. We will use the built in dashboard to visualize data coming from the device.
 
-### Conclusion
-Above steps demostrated how to label data, built model, train model, optimize model, run model and integrate machine learning model running on NVIDIA Nano with AWS Cloud dashboard.
+Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Cloudwatch
+
+Create a dashboard called “aws-nvidia-jetson-nano-dashboard-your-name”
+
+Choose Line in the widget
+
+Under Custom Namespaces, select “string”, “Metrics with no dimensions”, and then select all metrics.
+
+Next, set “Auto-refresh” to the smallest interval possible (1h), and change the “Period” to whatever works best for you (1 second or 5 seconds)
+
+You will see analysis on number of times cats and dogs detected by NVIDIA Jetson Nano
+
+NOTE: These metrics will only appear once they have been sent to Cloudwatch via the Lambda code running on edge. It may take some time for them to appear after your model is deployed and running locally. If they do not appear, then there is a problem somewhere in the pipeline.
+
+
+### With this we have come to the end of the session. As part of building this project, you learnt the following:
+
+1.	How to create and annotate dataset for computer vision based model using Amazon Sagemaker GroundTruth
+2.  How to build and train and optimize model in Amazon SageMaker
+3.	Setup and configure AWS IoT Greengrass 
+4.	Deploy the inference lambda function and model on NVIDIA Jetson Nano
+5.	Analyze model inference data using AWS CloudWatch
