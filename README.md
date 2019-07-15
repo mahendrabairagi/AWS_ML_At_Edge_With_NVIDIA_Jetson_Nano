@@ -10,7 +10,7 @@ In this project I will walkthrough how to create ML@Ede video analytics applicat
 Lets start with Step 1 
 
 ### Step 1: Data Annotation using Amazon Sagemaker GroundTruth
-In this lab we will use Amazon Sagemaker GroundTruth to label images in a training dataset consisting of cat and dog images. 
+In this lab we will use Amazon Sagemaker GroundTruth to label images in a training dataset consisting of lego dinosaurs images. 
 You will start with an unlabeled image training data set, acquire labels for all the images using SageMaker Ground Truth private workforce and finally analyze the results of the labeling job.
 
 High Level Steps 
@@ -23,7 +23,7 @@ High Level Steps
 
 ### 1.	Upload training data into an S3 bucket.
 
-In this step you will first create an Amazon S3 bucket where you will store the training data.  You will then download the training data consisting of cat & dog images and then upload to the S3 bucket created. 
+In this step you will first create an Amazon S3 bucket where you will store the training data.  You will then download the training data consisting of lego dinosaurs images and then upload to the S3 bucket created. 
 
 #### 1.1	 Create an S3 bucket.
 
@@ -47,11 +47,12 @@ In this step you will create an Amazon S3 bucket where you will store the traini
 #### 1.2	 Download the training data.
 
 In this step you will download the training data to your local machine.
+I have create my own lego dinosaurus dataset, it has about 388 files of 6 dinosaurus classes. Brachiosaurus, Dilophosaurus, Spinosaurus, Stegosaurus, Triceratops and Unknown dinosaurus.
 
-* Download the training data (cat & dog images) from this link
-https://s3.amazonaws.com/groundtruth-ml-roadshow-workshop/traindata_cat_dog_images_20.zip
+* Download the training data (lego dinosaurs images) from this link
+https://sagemaker-nvidia-webinar.s3.amazonaws.com/lego_dinosaurs_dataset.zip
 
-* Extract the traindata_cat_dog_images_20.zip, if necessary.  You should see “traindata_cat_dog_images_20” folder with about 20 files.
+* Extract the lego_dinosaurs_dataset.zip, if necessary.  You should see “lego_dinosaurs_dataset” folder with about 388 files.
 
 
 #### 1.3	 Upload training data to the S3 bucket.
@@ -63,7 +64,7 @@ In this step you will upload the training data to the Amazon S3 bucket created i
   -	Click Upload
   -	In the Upload Wizard
     -	On the first step ‘Select files’
-* Drag/Drop the ‘traindata_cat_dog_images_20’ folder from your local machine
+* Drag/Drop the ‘lego_dinosaurs_dataset’ folder from your local machine
   - Click Next
 * On the ‘Set Permissions’ step
   - Leave defaults and click ‘Next’
@@ -74,15 +75,7 @@ In this step you will upload the training data to the Amazon S3 bucket created i
 * You will see the progress bar for the upload.
 * Wait till upload is complete.
 
-#### 1.4	(Optional step) Make sample images public.
-
-When configuring Ground Truth Labeling job, you need to provide good and bad examples.  For this the image files in S3 bucket need to made publicly accessible.
-* In the S3 bucket, click traindata_cat_dog_images_20’  100.jpg and click ‘Make Public’.  Make note the object url https://s3.amazonaws.com/<bucket-name>/traindata_cat_dog_images_20/100.jpg
-
-* In the S3 bucket, click traindata_cat_dog_images_20’  199.jpg and click ‘Make Public’. Make note the object url https://s3.amazonaws.com/<bucket-name>/traindata_cat_dog_images_20/199.jpg
-
-
-#### 1.5	Create a private Ground Truth Labeling Workforce.
+#### 1.4 Create a private Ground Truth Labeling Workforce.
 In this step, you will create a “private workteam” and add only one user (you) to it. 
 
 To create a private team:
@@ -103,14 +96,13 @@ That's it! This is your private worker's interface.
 Once the Ground Truth labeling job is submitted in the next step, you will see the annotation job in this portal.
 
 
-
-#### 1.6 Create a private Ground Truth Labeling Job.
-In this step, you will create a Ground Truth Labeling job and assign it to the private workforce created in Step 3.
+#### 1.5 Create a private Ground Truth Labeling Job.
+In this step, you will create a Ground Truth Labeling job and assign it to the private workforce.
 
 * Go to AWS Console > Amazon SageMaker > Labeling jobs
 * Click ‘Create labeling job’
 * In ‘Specify job details’ step
-* Job name : groundtruth-labeling-job-cat-dog (Note : Any unique name will do)
+* Job name : groundtruth-labeling-job-lego_dinosaurs (Note : Any unique name will do)
 * Input dataset location 
 * Create manifest
   - Entire S3 path where images are located. (Note : should end with /; For eg : s3://<bucketname>/<prefix/foldername>/)
@@ -130,19 +122,19 @@ In this step, you will create a Ground Truth Labeling job and assign it to the p
     - Select ‘Private’
     - Select the team created in previous step from the Private teams dropdown.  
     - Examine ‘Additional configuration’ options
-    - Leave ‘Automated data labeling’  ‘Enable’ unchecked.
+    - Leave ‘Automated data labeling’ - ‘Enable’ unchecked.
     - Leave ‘Number of workers per dataset object’ at 1
     - In 'Image classification labeling tool' Step
  
  ![](img_1_6.png)
 
-*	Enter "Please classify the images as 'cat' or 'dog' " in the textbox as an instruction to the workforce.
-  - Add two Options 'cat' or 'dog'
-  - For Good example and Bad example, add links of the public image urls noted in 1.4 section.
+*	Enter "Please classify the images as  Brachiosaurus, Dilophosaurus, Spinosaurus, Stegosaurus, Triceratops and Unknown in the textbox as an instruction to the workforce.
+  - Add six Options  Brachiosaurus, Dilophosaurus, Spinosaurus, Stegosaurus, Triceratops and Unknown
+  - For Good example and Bad example, add links of the public image urls. This is optional
   -	Submit
 *	Go to AWS Console > Amazon SageMaker > Labeling jobs to verify that a labeling job has been created.
 
-#### 1.7 Label the images using the Ground Truth Labeling portal
+#### 1.6 Label the images using the Ground Truth Labeling portal
 
 In this step, you will complete a labeling/annotation job assigned to you from the  Ground Truth Labeling portal.  
 *	Login to the Ground Truth Labeling portal using the link provided to you in the email from `no-reply@verificationemail.com`.
@@ -152,33 +144,29 @@ Once the annotation job is assigned, you can view the job (similar to the pictur
 ![](img_1_7_1.png)
  
 *	Click ‘Start working’
-*	You will start seeing the images that need to be labeled.  For each image, select cat/dog in the option and click ‘Submit’
+*	You will start seeing the images that need to be labeled.  For each image, select  Brachiosaurus, Dilophosaurus, Spinosaurus, Stegosaurus, Triceratops and Unknown in the option and click ‘Submit’
 
 ![](img_1_7_2.png)
 
-Note : After labeling a subset of images, the annotation job will be complete.  If the first annotation job did not include all 20 images, you will see a new job in the portal after a few minutes. Repeat the process of labeling images in the jobs as they appear in the portal, till all images are labelled.  You can check the status of the labeling job from the Ground Truth  Labeling Jobs, which will show you the number of images labeled out of the total images.
+Note : After labeling a subset of images, the annotation job will be complete.  If the first annotation job did not include all images, you will see a new job in the portal after a few minutes. Repeat the process of labeling images in the jobs as they appear in the portal, till all images are labelled.  You can check the status of the labeling job from the Ground Truth  Labeling Jobs, which will show you the number of images labeled out of the total images.
 
 ![](img_1_7_3.png)
 
-#### 1.8.	Analyze Results
+#### 1.7.	Analyze Results
 
 In this step, you will review the manifest files created during the Ground Truth Labeling process.  The manifest files are in the S3 bucket you created in Step 1.
 
 Input Manifest File
 
-Located in S3 bucket in the prefix : traindata_cat_dog_images_20/dataset-xxxxxx.manifest.
+Located in S3 bucket in the prefix : lego_dinosaurs_dataset/dataset-xxxxxx.manifest.
 
 The manifest is a json file that captures information about the training data.
 
 Sample :
 
-{"source-ref":"s3://ground-truth-labelling-job-sm/traindata_cat_dog_images_20/0.jpg"}
-{"source-ref":"s3://ground-truth-labelling-job-sm/traindata_cat_dog_images_20/10.jpg"}
-{"source-ref":"s3://ground-truth-labelling-job-sm/traindata_cat_dog_images_20/100.jpg"}
-{"source-ref":"s3://ground-truth-labelling-job-sm/traindata_cat_dog_images_20/110.jpg"}
-{"source-ref":"s3://ground-truth-labelling-job -sm/traindata_cat_dog_images_20/120.jpg"}
-{"source-ref":"s3://ground-truth-labelling-job-sm/traindata_cat_dog_images_20/130.jpg"}
-{"source-ref":"s3://ground-truth-labelling-job-sm/traindata_cat_dog_images_20/140.jpg"}
+{"source-ref":"s3://dino-dataset/lego_dinosaurs_dataset/3_Triceratops_084.jpg"}
+{"source-ref":"s3:/dino-dataset/lego_dinosaurs_dataset/5_NoDino_245.jpg"}
+{"source-ref":"s3://dino-dataset/lego_dinosaurs_dataset/0_Spinosaurus_111.jpg"}
 …
 
 
@@ -190,9 +178,10 @@ The manifest is a json file that captures metadata about each labeled image.
 
 Sample: 
 
-{"source-ref":"s3://ground-truth-labelling-job-sm/traindata_cat_dog_images_20/0.jpg","groundtruth-labeling-job-cat-dog0408":0,"groundtruth-labeling-job-cat-dog0408-metadata":{"confidence":0.51,"job-name":"labeling-job/groundtruth-labeling-job-cat-dog0408","class-name":"cat","human-annotated":"yes","creation-date":"2019-04-09T04:21:19.914807","type":"groundtruth/image-classification"}}
-{"source-ref":"s3://ground-truth-labelling-job-sm/traindata_cat_dog_images_20/10.jpg","groundtruth-labeling-job-cat-dog0408":0,"groundtruth-labeling-job-cat-dog0408-metadata":{"confidence":0.9,"job-name":"labeling-job/groundtruth-labeling-job-cat-dog0408","class-name":"cat","human-annotated":"yes","creation-date":"2019-04-09T04:29:57.698312","type":"groundtruth/image-classification"}}
-{"source-ref":"s3://ground-truth-labelling-job-sm/traindata_cat_dog_images_20/100.jpg","groundtruth-labeling-job-cat-dog0408":0,"groundtruth-labeling-job-cat-dog0408-metadata":{"confidence":0.75,"job-name":"labeling-job/groundtruth-labeling-job-cat-dog0408","class-name":"cat","human-annotated":"yes","creation-date":"2019-04-09T04:28:53.932313","type":"groundtruth/image-classification"}}
+{"source-ref": "s3://dino-dataset/3_Triceratops_084.jpg", "dino-image-classification": 3, "dino-image-classification-metadata": {"confidence": 0.94, "job-name": "labeling-job/dino-image-classification", "class-name": "3_Triceratops", "human-annotated": "yes", "creation-date": "2019-05-25T08:54:54.133410", "type": "groundtruth/image-classification"}}
+{"source-ref": "s3://dino-dataset/5_NoDino_245.jpg", "dino-image-classification": 5, "dino-image-classification-metadata": {"confidence": 0.95, "job-name": "labeling-job/dino-image-classification", "class-name": "5_Unknown", "human-annotated": "yes", "creation-date": "2019-05-25T08:37:55.495129", "type": "groundtruth/image-classification"}}
+{"source-ref": "s3://dino-dataset/0_Spinosaurus_111.jpg", "dino-image-classification": 0, "dino-image-classification-metadata": {"confidence": 0.68, "job-name": "labeling-job/dino-image-classification", "class-name": "0_Spinosaurus", "human-annotated": "yes", "creation-date": "2019-05-25T08:58:35.374405", "type": "groundtruth/image-classification"}}
+{"sourc
 ….
 
 Along with the other metadata information, the output manifest shows the identified class of the image and confidence.  
@@ -202,9 +191,9 @@ Now we need to build model, train model and optimize model.
 ### Step 2: Model building, training and optimization using Sagemaker notebooks, containers and Neo
 Model builing, training and optimization is simiplifed by Sagemaker notebooks, training container and Neo.
 All these steps can be done using single notebook. Please follow attached notebook 
-![Sagemaker notebook](ml_at_edge_notebook.ipynb)
+![Sagemaker notebook](sagemaker_image_classification.ipynb)
 
-Beutify of jupyternotebook is that it can contains code as well as comments. I will use the notebook to explain model building, training and optimization
+Beauty of jupyternotebook is that it can contains code as well as comments. I will use the notebook to explain model building, training and optimization
 
 Now that model is build and optimized, now we can deploy this model on NVIDIA Jetson Nano using AWS IoT Greengrass
 
@@ -319,7 +308,7 @@ Under Custom Namespaces, select “string”, “Metrics with no dimensions”, 
 
 Next, set “Auto-refresh” to the smallest interval possible (1h), and change the “Period” to whatever works best for you (1 second or 5 seconds)
 
-You will see analysis on number of times cats and dogs detected by NVIDIA Jetson Nano
+You will see analysis on number of times different dinosaurs detected by NVIDIA Jetson Nano
 
 NOTE: These metrics will only appear once they have been sent to Cloudwatch via the Lambda code running on edge. It may take some time for them to appear after your model is deployed and running locally. If they do not appear, then there is a problem somewhere in the pipeline.
 
