@@ -195,14 +195,26 @@ Now that model is build and optimized, now we can deploy this model on NVIDIA Je
 
 ### Step 3: Deploy model on Jetson Nano using AWS IoT Greengrass
 This step will need
-- 3.1 Installing AWS IoT Greengrass 
-- 3.2 Setup and configure Inference code using AWS Lambda
-- 3.3 Set machine leaning at edge deployment
-- 3.4 Deploy machine learning at edge on NVIDIA Jetson Nano
-- 3.5 Run model, check inference
+- 3.1 Installing SageMaker Neo runtime
+- 3.2 Installing AWS IoT Greengrass 
+- 3.3 Setup and configure Inference code using AWS Lambda
+- 3.4 Set machine leaning at edge deployment
+- 3.5 Deploy machine learning at edge on NVIDIA Jetson Nano
+- 3.6 Run model, check inference
 
-#### 
-- 3.1 Installing AWS IoT Greengrass 
+#### 3.1 Installing SageMaker Neo runtime
+Sagemaker Neo Runtime aka SageMake Neo DLR is a runtime library that helps run models complies using Sagemaker Neo in cloud. In our model training step, last step is to compile model using Sagemaker Neo. In this step we will install Sagemaker Neo Runtime.
+- Go to Sagemaker Neo git https://neo-ai-dlr.readthedocs.io/en/latest/install.html
+- Check step under "Installing Pre-built DLR Wheels for Your Device"
+- You can install Sagemaker Neo using  "pip install  link-to-matching-wheel-on-S3"
+- link-to-matching-wheel-on-S3 is for Jetson Nano, look for link such as https://s3-us-west-2.amazonaws.com/neo-ai-dlr-release/v1.0/jetsonnano-aarch64-cu10-ubuntu18_04-glibc2_27-libstdcpp3_4/dlr-1.0-py2.py3-none-any.whl
+- Donwload this .whl file
+- log into Jetbot or SSH to jetbot.  Install this .whl file using command such as 
+```
+pip install dlr-1.0-py2.py3-none-any.whl
+```
+
+#### 3.2 Installing AWS IoT Greengrass 
 
 First setup Setup your Jetson Nano Developer Kit with the SD card image.
 
@@ -245,7 +257,7 @@ $ sudo ./greengrassd start
 
 You should get a message in your terminal "Greengrass sucessfully started with PID: xxx"
 
-#### 3.2 Setup and configure Inference code using AWS Lambda
+#### 3.3 Setup and configure Inference code using AWS Lambda
 
 Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Lambda
 
@@ -264,24 +276,24 @@ Role: Choose an existing role
 Click Create Function
 Replace the default script with the [inference script](inference-lambda.py)
 
-#### 3.3  Set machine leaning at edge deployment
+#### 3.4  Set machine leaning at edge deployment
 - Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Greengrass
 - Go to AWS IoT Greengrass console
-- Choose the greengrass group you created in step 3.1
-- Select lambda, choose lambda function you created in 3.2
+- Choose the greengrass group you created in step 3.2
+- Select lambda, choose lambda function you created in 3.3
 - make it the lambda long running per doc ![https://docs.aws.amazon.com/greengrass/latest/developerguide/long-lived.html]
 (https://docs.aws.amazon.com/greengrass/latest/developerguide/long-lived.html)
 - In memory, set it to 300MB
 - In resources, add ML model, Select Sagemaker trained model, select job that you created in Sagemaker build model step
 
-#### 3.4 Deploy machine learning at edge on NVIDIA Jetson Nano
+#### 3.5 Deploy machine learning at edge on NVIDIA Jetson Nano
 - Go back to AWS IoT Greengrass console
 - We will need to send messages from NVIDIA Jetson to cloud. so we need to setup message routing per screenshot below.
 Select from device jetson nano, to cloud and message topi is "fromnano"
 - Click deploy
 - This will take few minus to download and deploy model
 
-#### 3.5 Check inference
+#### 3.6 Check inference
 - Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Greengrass
 - Go to AWS IoT console
 ![](img_3_5_1.png)
