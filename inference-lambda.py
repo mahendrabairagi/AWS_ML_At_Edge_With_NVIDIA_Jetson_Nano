@@ -13,7 +13,6 @@ model_resource_path =  ('/ml_model')
 #model_resource_path = '/home/jetbot/projects/dino/dino_model'
 dlr_model = DLRModel(model_resource_path, 'gpu')
 
-camera = Camera.instance(width=224, height=224)
 cloudwatch = boto3.client('cloudwatch')
 prev_class = -1
 
@@ -59,9 +58,13 @@ def send_mqtt_message(message):
     mqtt_client.publish(topic='dino-detect',
                         payload=message)
 
+gst_str = 'nvarguscamerasrc ! video/x-raw(memory:NVMM), width=%d, height=%d, format=(string)NV12, framerate=(fraction)%d/1 ! nvvidconv ! video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! videoconvert ! appsink' % (3280, 3280, 21, 224,224)
+cap = cv2.VideoCapture(gst_str, cv2.CAP_GSTREAMER)
+
+
 while True:
-    img = camera.value
-    probs, classes = predict({'new': img}) 
+    re, img = cap.read()
+    probs, classes = predict(img) 
 
     msg = "Start..."
     s3url = ""
