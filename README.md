@@ -187,9 +187,10 @@ Now we need to build model, train model and optimize model.
 ### Step 2: Model building, training and optimization using Sagemaker notebooks, containers and Neo
 Model builing, training and optimization is simiplifed by Sagemaker notebooks, training container and Neo.
 All these steps can be done using single notebook. Please follow attached notebook 
-[Sagemaker notebook](sagemaker_image_classification.ipynb)
+[Sagemaker notebook](sagemaker_image_classification.ipynb). Download this notebook and upload it to your Sagemaker environment. To create Sagemaker notebook environment, please follow this [guide](https://github.com/awslabs/amazon-sagemaker-workshop/tree/master/NotebookCreation) 
 
-Beauty of jupyternotebook is that it can contains code as well as comments. I will use the notebook to explain model building, training and optimization
+Beauty of jupyternotebook is that it can contains code as well as comments. I will use the notebook to explain model building, training and optimization.
+
 
 Now that model is build and optimized, now we can deploy this model on NVIDIA Jetson Nano using AWS IoT Greengrass
 
