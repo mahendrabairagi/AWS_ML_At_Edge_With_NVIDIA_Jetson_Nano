@@ -148,8 +148,6 @@ Once the annotation job is assigned, you can view the job (similar to the pictur
 
 Note : After labeling a subset of images, the annotation job will be complete.  If the first annotation job did not include all images, you will see a new job in the portal after a few minutes. Repeat the process of labeling images in the jobs as they appear in the portal, till all images are labelled.  You can check the status of the labeling job from the Ground Truth  Labeling Jobs, which will show you the number of images labeled out of the total images.
 
-![](img_1_7_3.png)
-
 #### 1.7.	Analyze Results
 
 In this step, you will review the manifest files created during the Ground Truth Labeling process.  The manifest files are in the S3 bucket you created in Step 1.
