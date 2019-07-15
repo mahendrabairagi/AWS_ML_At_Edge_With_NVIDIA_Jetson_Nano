@@ -126,8 +126,6 @@ In this step, you will create a Ground Truth Labeling job and assign it to the p
     - Leave ‘Number of workers per dataset object’ at 1
     - In 'Image classification labeling tool' Step
  
- ![](img_1_6.png)
-
 *	Enter "Please classify the images as  Brachiosaurus, Dilophosaurus, Spinosaurus, Stegosaurus, Triceratops and Unknown in the textbox as an instruction to the workforce.
   - Add six Options  Brachiosaurus, Dilophosaurus, Spinosaurus, Stegosaurus, Triceratops and Unknown
   - For Good example and Bad example, add links of the public image urls. This is optional
