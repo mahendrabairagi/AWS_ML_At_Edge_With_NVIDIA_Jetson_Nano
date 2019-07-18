@@ -211,7 +211,12 @@ Sagemaker Neo Runtime aka SageMake Neo DLR is a runtime library that helps run m
 - Donwload this .whl file
 - log into Jetbot or SSH to jetbot.  Install this .whl file using command such as 
 ```
-pip install dlr-1.0-py2.py3-none-any.whl
+sudo pip install dlr-1.0-py2.py3-none-any.whl
+```
+
+- also install AWS Python SDK boto3
+```
+sudp pip install boto3
 ```
 
 #### 3.2 Installing AWS IoT Greengrass 
@@ -283,15 +288,27 @@ Replace the default script with the [inference script](inference-lambda.py)
 - Select lambda, choose lambda function you created in 3.3
 - make it the lambda long running per doc ![https://docs.aws.amazon.com/greengrass/latest/developerguide/long-lived.html]
 (https://docs.aws.amazon.com/greengrass/latest/developerguide/long-lived.html)
-- In memory, set it to 300MB
-- In resources, add ML model, Select Sagemaker trained model, select job that you created in Sagemaker build model step
+![](lambda_setup.png)
+- In memory, set it to 700mb+
+- In resources, add ML model as per below 
+, Select S3 bucket where optimized model (i.e. Sagemaker Neo compliled) is located. Select bucket first from dropdown box and then model file
+![](ml.png)
+- setupt Greengrass role
+- go to "Settings" menu on left menu items, this will open Greengrass settings. Check top part that says "Group role", select Greengrass serice role. Go to AWS IAM console, go to roles, select the greengrass role and add "AmazonS3fullAccess", "CloudWatchFullAccess" and "AWSGreengrassResourceAccessRolePolicy" .. per screenshot below
+![](greengrassrole.png)
+- Setup Greengrass logs
+Under "Settings", scroll donwn, you will see option to setup log level. Setup Greengrass and lambda logs to info-level logs per screenshot below
+![](logging.png)
 
 #### 3.5 Deploy machine learning at edge on NVIDIA Jetson Nano
 - Go back to AWS IoT Greengrass console
-- We will need to send messages from NVIDIA Jetson to cloud. so we need to setup message routing per screenshot below.
-Select from device jetson nano, to cloud and message topi is "fromnano"
-- Click deploy
+- We will need to send messages from NVIDIA Jetson to cloud. so we need to setup message subscription per screenshot below.
+Choose "subscrption" menu from left menu items, choose "source" as your lambda fundction and destination as "IoT Cloud", topic as one in the lambda code i.e. "dino-detect". This will route messages from lambda to IoT Cloud i.e. AWS IoT. 
+![](subscription.png)
+- Now we are ready to deploy model, lambda and configuration.
+- From Actions menu on top righ side, select "Deploy"
 - This will take few minus to download and deploy model
+![](deploy.png)
 
 #### 3.6 Check inference
 - Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Greengrass
@@ -302,6 +319,15 @@ Select from device jetson nano, to cloud and message topi is "fromnano"
 - Add "#" in Subscribe topic, click Subscribe. This will subscribe to all IoT topics comming to Jetson Nano
 ![](img_3_5_3.png)
 - In Subscrition box you will start seeing IoT messages coming from Jetson nano
+
+#### 3.6 Troubleshooting
+- Error logs are recorded in CloudWatch, you can log into AWS CloudWatch and check for greengrass errors
+- Lambda user error logs on device are located at /greengrass/ggc/var/log/user and then your region, account number, then you will see log file named after your lambda e.g. inference-lambda-webinar.log
+- Greengrass system logs are on device at /greengrass/ggc/var/system. There are many logs, runtime log is imp
+- if you get any error related to camera buffer then please run command "sudo systemctl restart nvargus-daemon" to restart related process.
+- to start and stop greengrass,  cd to /greengrass/ggc/core and then ./greengrassd start to start and ./greengrassd to stop
+
+
 
 ### Step 4: Visualize and analyse video analytics from the model inference on Jetson Nano
 The lambda code running on NVIDIA Jetson Nano device sends IoT messages back to cloud. These messages are sent to AWS CloudWatch. CloudWatch has built in dashboard. We will use the built in dashboard to visualize data coming from the device.
