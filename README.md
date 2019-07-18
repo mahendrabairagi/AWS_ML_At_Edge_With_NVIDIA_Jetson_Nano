@@ -15,17 +15,17 @@ Let's start with Step 1:
 In this lab we will use Amazon SageMaker GroundTruth to label images in a training dataset consisting of Lego Dinosaurs images. 
 You will start with an unlabeled image training data set, acquire labels for all the images using SageMaker Ground Truth private workforce and finally analyze the results of the labeling job.
 
-High Level Steps 
+High Level Steps:
 
 1.	Upload training data into an S3 bucket.
 2.	Create a private Ground Truth Labeling workforce.
 3.	Create a Ground Truth Labeling job
-4.	Label the images using the Ground Truth Labeling portal.
+4.	Label images using the Ground Truth Labeling portal.
 5.	Analyze results
 
 ### 1.	Upload training data into an S3 bucket.
 
-In this step you will first create an Amazon S3 bucket where you will store the training data.  You will then download the training data consisting of lego dinosaurs images and then upload to the S3 bucket created. 
+In this step you will first create an Amazon S3 bucket where you will store the training data.  You will then download the training data consisting Lego Dinosaurs images and then upload this dataset to the S3 bucket created. 
 
 #### 1.1	 Create an S3 bucket.
 
@@ -41,9 +41,6 @@ In this step you will create an Amazon S3 bucket where you will store the traini
       - Click ‘Next’
   - On the ‘Configure Options’ Step
       - Leave defaults and Click ‘Next’
-  - On the ‘Set Permissions’ Step
-    Uncheck the four checkboxes on this screen that block public access to the data.
-      - Click ‘Next’
       - On the ‘Review’ Step, click 'Next', create bucket.
 
 #### 1.2	 Download the training data.
@@ -191,7 +188,7 @@ Model building, training and optimization is simplified by SageMaker notebooks, 
 All these steps can be done using single notebook. Please follow attached notebook 
 [SageMaker notebook](sagemaker_image_classification.ipynb). Download this notebook and upload it to your SageMaker environment. To create SageMaker notebook environment, please follow this [guide](https://github.com/awslabs/amazon-sagemaker-workshop/tree/master/NotebookCreation) 
 
-Beauty of jupyter notebook is that it can contains code as well as comments. I will use the notebook to explain model building, training and optimization.
+One of the nice features of of jupyter notebook is that it can contains code as well as comments. I will use the notebook to explain model building, training and optimization.
 
 Now that model is build and optimized, now we can deploy this model on NVIDIA Jetson Nano using AWS IoT Greengrass
 
@@ -205,18 +202,18 @@ This step will need
 - 3.6 Run model, check inference
 
 #### 3.1 Installing SageMaker Neo runtime
-SageMaker Neo Runtime aka SageMaker Neo DLR is a runtime library that helps run models complies using SageMaker Neo in cloud. In our model training step, last step is to compile model using SageMaker Neo. In this step we will install SageMaker Neo Runtime.
+SageMaker Neo Runtime aka SageMaker Neo DLR is a runtime library that helps run models compiled using SageMaker Neo in the cloud. In our model training step, last step is to compile model using SageMaker Neo. In following steps we will install SageMaker Neo Runtime.
 - Go to SageMaker Neo git https://neo-ai-dlr.readthedocs.io/en/latest/install.html
 - Check step under "Installing Pre-built DLR Wheels for Your Device"
-- You can install SageMaker Neo using  "pip install  link-to-matching-wheel-on-S3"
+- You can install SageMaker Neo using  "sudo pip install  'link-to-matching-wheel-on-S3'"
 - link-to-matching-wheel-on-S3 is for Jetson Nano, look for link such as https://s3-us-west-2.amazonaws.com/neo-ai-dlr-release/v1.0/jetsonnano-aarch64-cu10-ubuntu18_04-glibc2_27-libstdcpp3_4/dlr-1.0-py2.py3-none-any.whl
 - Download this .whl file
-- log into Jetbot or SSH to jetbot.  Install this .whl file using command such as 
+- log into Jetbot dekstop or SSH to jetbot.  Install this .whl file using command such as 
 ```
 sudo pip install dlr-1.0-py2.py3-none-any.whl
 ```
 
-- also install AWS Python SDK boto3
+- also install AWS Python SDK boto3, this is needed for Greengrass Lambda code to send custom metrics to CloudWatch
 ```
 sudo pip install boto3
 ```
@@ -232,8 +229,8 @@ $ sudo adduser --system ggc_user
 $ sudo addgroup --system ggc_group
 ```
 
-Setup your AWS account and Greengrass group during this page: https://docs.aws.amazon.com/greengrass/latest/developerguide/gg-config.html
-After downloading your unique security resource keys to your Jetson that were created in this step, proceed to #4 below.
+Setup your AWS account and Greengrass group using this page: https://docs.aws.amazon.com/greengrass/latest/developerguide/gg-config.html
+After downloading your unique security resource keys to your Jetson that were created in this step, proceed to step below. If you created and downloaded these keys on machine other than Jetson Nano then you will need to copy these to Jetson Nano. You can use SCP to transfer files from your desktop to Jetson Nano.
 
 Download the AWS IoT Greengrass Core Software (v1.9.1) for ARMv8 (aarch64):
 
@@ -276,7 +273,7 @@ In the search bar, type “greengrass-hello-world” and hit Enter
 
 Choose the python blueprint and click Configure
 
-Name the function: e.g. aws_nvidia_webinar
+Name the function: e.g. interface-lambda
 Role: Choose an existing role
 [Note: You may need to create new role, give basic execution permissions, choose default)
 
@@ -341,7 +338,7 @@ Choose "subscription" menu from left menu items, choose "source" as your lambda 
 
 #### 3.7 Troubleshooting
 - Error logs are recorded in CloudWatch, you can log into AWS CloudWatch and check for greengrass errors
-- Lambda user error logs on device are located at /greengrass/ggc/var/log/user and then your region, account number, then you will see log file named after your lambda e.g. inference-lambda-webinar.log
+- Lambda user error logs on device are located at /greengrass/ggc/var/log/user and then your region, account number, then you will see log file named after your lambda e.g. inference-lambda.log
 - Greengrass system logs are on device at /greengrass/ggc/var/system. There are many logs, runtime log is imp
 - if you get any error related to camera buffer then please run command "sudo systemctl restart nvargus-daemon" to restart related process.
 - to start and stop greengrass,  cd to /greengrass/ggc/core and then ./greengrassd start to start and ./greengrassd to stop
