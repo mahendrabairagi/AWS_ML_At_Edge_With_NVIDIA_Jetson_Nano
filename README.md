@@ -293,8 +293,25 @@ Replace the default script with the [inference script](inference-lambda.py)
 - In resources, add ML model as per below 
 , Select S3 bucket where optimized model (i.e. Sagemaker Neo compliled) is located. Select bucket first from dropdown box and then model file
 ![](ml.png)
-- setupt Greengrass role
-- go to "Settings" menu on left menu items, this will open Greengrass settings. Check top part that says "Group role", select Greengrass serice role. Go to AWS IAM console, go to roles, select the greengrass role and add "AmazonS3fullAccess", "CloudWatchFullAccess" and "AWSGreengrassResourceAccessRolePolicy" .. per screenshot below
+- In lambda - under Resources, select "local", we will now setup local resource access. This is the access Lambda needs in order to access local resources such as temp folder, shared memory, shared cache etc. Please follow screenshot below
+![](lra.png)
+**** Screenshot is not complete ****
+make sure you add following resources
+
+- /dev/nvhost-prof-gpu resource type "Device"
+- /dev/shm resource type "Volume"
+- /dev/tmp resource type "Volume"
+- /dev/nvhost-vi resource type "Device"
+- /dev/nvhost-vic resource type "Device"
+- /dev/nvhost-nvmap resource type "Device"
+- /dev/nvhost-dbg-gpu resource type "Device"
+- /dev/nvhost-gpu resource type "Device"
+- /dev/nvhost-ctrl-gpu resource type "Device"
+- /dev/tegra-dc-ctrl resource type "Device"
+- /dev/nvmap resource type "Device"
+- /dev/video0 or /dev/video1 if you use USB camera
+
+- Setupt Greengrass role: go to "Settings" menu on left menu items, this will open Greengrass settings. Check top part that says "Group role", select Greengrass serice role. Go to AWS IAM console, go to roles, select the greengrass role and add "AmazonS3fullAccess", "CloudWatchFullAccess" and "AWSGreengrassResourceAccessRolePolicy" .. per screenshot below
 ![](greengrassrole.png)
 - Setup Greengrass logs
 Under "Settings", scroll donwn, you will see option to setup log level. Setup Greengrass and lambda logs to info-level logs per screenshot below
