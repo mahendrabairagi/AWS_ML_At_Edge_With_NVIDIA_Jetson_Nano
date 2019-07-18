@@ -1,6 +1,6 @@
 # AWS ML@Edge with NVIDIA Jetson Nano
 
-In this project I will walkthrough how to create ML@Edge video analytics application. This will be end to end process, from data annotation, model building, training, optimization and then deploying model on edge device.
+In this project I will walkthrough how to create ML@Edge video analytics application. This will be end to end process, from data annotation, model building, training, optimization and then deploying model on edge device NVIDIA Jetson Nano.
 
 ### Step 1: Data Annotation using Amazon SageMaker GroundTruth
 ### Step 2: Model building, training and optimization using SageMaker notebooks, containers and Neo
