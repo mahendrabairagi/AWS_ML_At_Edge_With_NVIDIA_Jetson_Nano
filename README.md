@@ -1,18 +1,18 @@
-# AWS ML@Edge With NVIDIA Jetson Nano
+# AWS ML@Edge with NVIDIA Jetson Nano
 
-In this project I will walkthrough how to create ML@Ede video analytics application. This will be end to end process, from data annotation, model building, training, optimization and then deploying model on edge device.
+In this project I will walkthrough how to create ML@Edge video analytics application. This will be end to end process, from data annotation, model building, training, optimization and then deploying model on edge device.
 
-### Step 1: Data Annotation using Amazon Sagemaker GroundTruth
-### Step 2: Model building, training and optimization using Sagemaker notebooks, containers and Neo
+### Step 1: Data Annotation using Amazon SageMaker GroundTruth
+### Step 2: Model building, training and optimization using SageMaker notebooks, containers and Neo
 ### Step 3: Deploy model on Jetson Nano using AWS IoT Greengrass
-### Step 4: Visualize and analyse video analytics from the model inference on Jetson Nano
+### Step 4: Visualize and analyze video analytics from the model inference on Jetson Nano
 
 
 
-Lets start with Step 1:
+Let's start with Step 1:
 
-### Step 1: Data Annotation using Amazon Sagemaker GroundTruth
-In this lab we will use Amazon Sagemaker GroundTruth to label images in a training dataset consisting of lego dinosaurs images. 
+### Step 1: Data Annotation using Amazon SageMaker GroundTruth
+In this lab we will use Amazon SageMaker GroundTruth to label images in a training dataset consisting of Lego Dinosaurs images. 
 You will start with an unlabeled image training data set, acquire labels for all the images using SageMaker Ground Truth private workforce and finally analyze the results of the labeling job.
 
 High Level Steps 
@@ -36,7 +36,7 @@ In this step you will create an Amazon S3 bucket where you will store the traini
 * From the Amazon S3 console dashboard, choose Create Bucket.
 * In Create Bucket wizard
     - On the ‘Name and region’ Step
-      - Type a bucket name in Bucket Name. (For eg., ground-truth-labelling-job-initials-date; Note that this name should be unique across all AWS)
+      - Type a bucket name in Bucket Name. (For e.g., ground-truth-labelling-job-initials-date; Note that this name should be unique across all AWS)
       - Select ‘US East’ as the region. 
       - Click ‘Next’
   - On the ‘Configure Options’ Step
@@ -49,7 +49,7 @@ In this step you will create an Amazon S3 bucket where you will store the traini
 #### 1.2	 Download the training data.
 
 In this step you will download the training data to your local machine.
-I have create my own lego dinosaurus dataset, it has about 388 files of 6 dinosaurus classes. Brachiosaurus, Dilophosaurus, Spinosaurus, Stegosaurus, Triceratops and Unknown dinosaurus.
+I have created Lego Dinosaurs dataset, it has about 388 files of 6 dinosaurus classes. Brachiosaurus, Dilophosaurus, Spinosaurus, Stegosaurus, Triceratops and Unknown dinosaurs.
 
 * Download the training data (lego dinosaurs images) from this link
 https://sagemaker-nvidia-webinar.s3.amazonaws.com/lego_dinosaurs_dataset.zip
@@ -107,7 +107,7 @@ In this step, you will create a Ground Truth Labeling job and assign it to the p
 * Job name : groundtruth-labeling-job-lego_dinosaurs (Note : Any unique name will do)
 * Input dataset location 
 * Create manifest
-  - Entire S3 path where images are located. (Note : should end with /; For eg : s3://<bucketname>/<prefix/foldername>/)
+  - Entire S3 path where images are located. (Note : should end with /; For e.g. : s3://<bucketname>/<prefix/foldername>/)
   - Select 'Images' as data type
   - Wait till the manifest creation is complete.
   - Click "Use this manifest"
@@ -186,10 +186,10 @@ Along with the other metadata information, the output manifest shows the identif
 
 Now we need to build model, train model and optimize model.
 
-### Step 2: Model building, training and optimization using Sagemaker notebooks, containers and Neo
-Model builing, training and optimization is simiplifed by Sagemaker notebooks, training container and Neo.
+### Step 2: Model building, training and optimization using SageMaker notebooks, containers and Neo
+Model building, training and optimization is simplified by SageMaker notebooks, training container and Neo.
 All these steps can be done using single notebook. Please follow attached notebook 
-[Sagemaker notebook](sagemaker_image_classification.ipynb). Download this notebook and upload it to your Sagemaker environment. To create Sagemaker notebook environment, please follow this [guide](https://github.com/awslabs/amazon-sagemaker-workshop/tree/master/NotebookCreation) 
+[SageMaker notebook](sagemaker_image_classification.ipynb). Download this notebook and upload it to your SageMaker environment. To create SageMaker notebook environment, please follow this [guide](https://github.com/awslabs/amazon-sagemaker-workshop/tree/master/NotebookCreation) 
 
 Beauty of jupyter notebook is that it can contains code as well as comments. I will use the notebook to explain model building, training and optimization.
 
@@ -205,12 +205,12 @@ This step will need
 - 3.6 Run model, check inference
 
 #### 3.1 Installing SageMaker Neo runtime
-Sagemaker Neo Runtime aka SageMake Neo DLR is a runtime library that helps run models complies using Sagemaker Neo in cloud. In our model training step, last step is to compile model using Sagemaker Neo. In this step we will install Sagemaker Neo Runtime.
-- Go to Sagemaker Neo git https://neo-ai-dlr.readthedocs.io/en/latest/install.html
+SageMaker Neo Runtime aka SageMaker Neo DLR is a runtime library that helps run models complies using SageMaker Neo in cloud. In our model training step, last step is to compile model using SageMaker Neo. In this step we will install SageMaker Neo Runtime.
+- Go to SageMaker Neo git https://neo-ai-dlr.readthedocs.io/en/latest/install.html
 - Check step under "Installing Pre-built DLR Wheels for Your Device"
-- You can install Sagemaker Neo using  "pip install  link-to-matching-wheel-on-S3"
+- You can install SageMaker Neo using  "pip install  link-to-matching-wheel-on-S3"
 - link-to-matching-wheel-on-S3 is for Jetson Nano, look for link such as https://s3-us-west-2.amazonaws.com/neo-ai-dlr-release/v1.0/jetsonnano-aarch64-cu10-ubuntu18_04-glibc2_27-libstdcpp3_4/dlr-1.0-py2.py3-none-any.whl
-- Donwload this .whl file
+- Download this .whl file
 - log into Jetbot or SSH to jetbot.  Install this .whl file using command such as 
 ```
 sudo pip install dlr-1.0-py2.py3-none-any.whl
@@ -218,7 +218,7 @@ sudo pip install dlr-1.0-py2.py3-none-any.whl
 
 - also install AWS Python SDK boto3
 ```
-sudp pip install boto3
+sudo pip install boto3
 ```
 
 #### 3.2 Installing AWS IoT Greengrass 
@@ -262,7 +262,7 @@ $ cd /greengrass/ggc/core/
 $ sudo ./greengrassd start
 ```
 
-You should get a message in your terminal "Greengrass sucessfully started with PID: xxx"
+You should get a message in your terminal "Greengrass successfully started with PID: xxx"
 
 #### 3.3 Setup and configure Inference code using AWS Lambda
 
@@ -276,7 +276,7 @@ In the search bar, type “greengrass-hello-world” and hit Enter
 
 Choose the python blueprint and click Configure
 
-Name the function: aws-nvidia-video-analysis-your-name
+Name the function: e.g. aws_nvidia_webinar
 Role: Choose an existing role
 [Note: You may need to create new role, give basic execution permissions, choose default)
 
@@ -293,7 +293,7 @@ Replace the default script with the [inference script](inference-lambda.py)
 ![](lambda_setup.png)
 - In memory, set it to 700mb+
 - In resources, add ML model as per below 
-, Select S3 bucket where optimized model (i.e. Sagemaker Neo compliled) is located. Select bucket first from dropdown box and then model file
+, Select S3 bucket where optimized model (i.e. SageMaker Neo compiled) is located. Select bucket first from dropdown box and then model file
 ![](ml.png)
 - In lambda - under Resources, select "local", we will now setup local resource access. This is the access Lambda needs in order to access local resources such as temp folder, shared memory, shared cache etc. Please follow screenshot below
 ![](lra.png)
@@ -313,20 +313,20 @@ make sure you add following resources
 - /dev/nvmap resource type "Device"
 - /dev/video0 or /dev/video1 if you use USB camera
 
-- Setupt Greengrass role: go to "Settings" menu on left menu items, this will open Greengrass settings. Check top part that says "Group role", select Greengrass serice role. Go to AWS IAM console, go to roles, select the greengrass role and add "AmazonS3fullAccess", "CloudWatchFullAccess" and "AWSGreengrassResourceAccessRolePolicy" .. per screenshot below
+- Setup Greengrass role: go to "Settings" menu on left menu items, this will open Greengrass settings. Check top part that says "Group role", select Greengrass service role. Go to AWS IAM console, go to roles, select the greengrass role and add "AmazonS3fullAccess", "CloudWatchFullAccess" and "AWSGreengrassResourceAccessRolePolicy" .. per screenshot below
 ![](greengrassrole.png)
 - Setup Greengrass logs
-Under "Settings", scroll donwn, you will see option to setup log level. Setup Greengrass and lambda logs to info-level logs per screenshot below
+Under "Settings", scroll down, you will see option to setup log level. Setup Greengrass and lambda logs to info-level logs per screenshot below
 ![](logging.png)
 
 #### 3.5 Deploy machine learning at edge on NVIDIA Jetson Nano
 - Go back to AWS IoT Greengrass console
-- We will need to send messages from NVIDIA Jetson to cloud. so we need to setup message subscription per screenshot below.
-Choose "subscrption" menu from left menu items, choose "source" as your lambda fundction and destination as "IoT Cloud", topic as one in the lambda code i.e. "dino-detect". This will route messages from lambda to IoT Cloud i.e. AWS IoT. 
+- We will need to send messages from NVIDIA Jetson to cloud. so, we need to setup message subscription per screenshot below.
+Choose "subscription" menu from left menu items, choose "source" as your lambda function and destination as "IoT Cloud", topic as one in the lambda code i.e. "dino-detect". This will route messages from lambda to IoT Cloud i.e. AWS IoT. 
 ![](subscription.png)
 - Now we are ready to deploy model, lambda and configuration.
-- From Actions menu on top righ side, select "Deploy"
-- This will take few minus to download and deploy model
+- From Actions menu on top right side, select "Deploy"
+- This will take few minutes to download and deploy model
 ![](deploy.png)
 
 #### 3.6 Check inference
@@ -335,11 +335,11 @@ Choose "subscrption" menu from left menu items, choose "source" as your lambda f
 ![](img_3_5_1.png)
 - Select Test from left menu
 ![](img_3_5_2.png)
-- Add "#" in Subscribe topic, click Subscribe. This will subscribe to all IoT topics comming to Jetson Nano
+- Add "#" in Subscribe topic, click Subscribe. This will subscribe to all IoT topics coming to Jetson Nano
 ![](img_3_5_3.png)
-- In Subscrition box you will start seeing IoT messages coming from Jetson nano
+- In Subscription box you will start seeing IoT messages coming from Jetson nano
 
-#### 3.6 Troubleshooting
+#### 3.7 Troubleshooting
 - Error logs are recorded in CloudWatch, you can log into AWS CloudWatch and check for greengrass errors
 - Lambda user error logs on device are located at /greengrass/ggc/var/log/user and then your region, account number, then you will see log file named after your lambda e.g. inference-lambda-webinar.log
 - Greengrass system logs are on device at /greengrass/ggc/var/system. There are many logs, runtime log is imp
@@ -348,8 +348,8 @@ Choose "subscrption" menu from left menu items, choose "source" as your lambda f
 
 
 
-### Step 4: Visualize and analyse video analytics from the model inference on Jetson Nano
-The lambda code running on NVIDIA Jetson Nano device sends IoT messages back to cloud. These messages are sent to AWS CloudWatch. CloudWatch has built in dashboard. We will use the built in dashboard to visualize data coming from the device.
+### Step 4: Visualize and analyze video analytics from the model inference on Jetson Nano
+The lambda code running on NVIDIA Jetson Nano device sends IoT messages back to cloud. These messages are sent to AWS CloudWatch. CloudWatch has built-in dashboard. We will use the built in dashboard to visualize data coming from the device.
 
 Go to [AWS Management console](https://console.aws.amazon.com/console/home?region=us-east-1) and search for Cloudwatch
 
@@ -368,8 +368,8 @@ NOTE: These metrics will only appear once they have been sent to Cloudwatch via 
 
 ### With this we have come to the end of the session. As part of building this project, you learnt the following:
 
-1.	How to create and annotate dataset for computer vision based model using Amazon Sagemaker GroundTruth
-2.  How to build and train and optimize model in Amazon SageMaker
+1.	How to create and annotate dataset for computer vision based model using Amazon SageMaker GroundTruth
+2.  How to build, train and optimize model in Amazon SageMaker
 3.	Setup and configure AWS IoT Greengrass 
 4.	Deploy the inference lambda function and model on NVIDIA Jetson Nano
 5.	Analyze model inference data using AWS CloudWatch
