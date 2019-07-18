@@ -7,7 +7,9 @@ In this project I will walkthrough how to create ML@Ede video analytics applicat
 ### Step 3: Deploy model on Jetson Nano using AWS IoT Greengrass
 ### Step 4: Visualize and analyse video analytics from the model inference on Jetson Nano
 
-Lets start with Step 1 
+
+
+Lets start with Step 1:
 
 ### Step 1: Data Annotation using Amazon Sagemaker GroundTruth
 In this lab we will use Amazon Sagemaker GroundTruth to label images in a training dataset consisting of lego dinosaurs images. 
